@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-todo-app
+  labels:
+    app: react-todo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react-todo-app
+  template:
+    metadata:
+      labels:
+        app: react-todo-app
+    spec:
+      containers:
+        - name: react-todo-app
+          image: pawanpandit1/react-todo-app:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
